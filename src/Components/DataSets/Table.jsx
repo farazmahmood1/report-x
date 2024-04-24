@@ -6,21 +6,21 @@ const Table = () => {
     const [data, setData] = useState([])
     const [allData, setAllData] = useState([])
 
-    const [pages , setPages] = useState(1);
-  const   [count , setCount] = useState('');
-  const resultsPerPage = 50;
+    const [pages, setPages] = useState(1);
+    const [count, setCount] = useState('');
+    const resultsPerPage = 50;
 
-  // function for getting page next:
-  const handleNextPage = () => {
-    setPages((prevPage) => prevPage + 1);
-  };
-// function for getting previous page:
-  const handlePrevPage = () => {
-    setPages((prevPage) => Math.max(prevPage - 1, 1));
-  };
-  const totalResults = count|| 0;
-  const startResult = (pages - 1) * resultsPerPage + 1;
-  const endResult = Math.min(pages * resultsPerPage, totalResults);
+    // function for getting page next:
+    const handleNextPage = () => {
+        setPages((prevPage) => prevPage + 1);
+    };
+    // function for getting previous page:
+    const handlePrevPage = () => {
+        setPages((prevPage) => Math.max(prevPage - 1, 1));
+    };
+    const totalResults = count || 0;
+    const startResult = (pages - 1) * resultsPerPage + 1;
+    const endResult = Math.min(pages * resultsPerPage, totalResults);
 
     useEffect(() => {
         getData()
@@ -35,7 +35,6 @@ const Table = () => {
 
         const formdata = new FormData();
         if (attr === "age") {
-
             formdata.append("age", e.target.value);
         }
         else if (attr === "country") {
@@ -51,8 +50,6 @@ const Table = () => {
 
         }
 
-
-
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
@@ -66,7 +63,7 @@ const Table = () => {
                 setData(result.data)
                 setCount(result.total_count)
                 // console.log(result)
-                
+
             })
             .catch((error) => console.error(error));
     }
@@ -115,36 +112,51 @@ const Table = () => {
                             <h3 className="card-title">Special title treatment</h3>
                             <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
                             <div className='d-flex justify-content-right'></div>
-                            <a className="btn btn-outline-success mt-2 mb-3" onClick={exportData}>Export CSVs</a>
+                            <a className="btn btn-outline-success mt-2 mb-3" onClick={exportData}>Export All CSVs</a>
+                            <a className="btn btn-outline-success mt-2 mb-3 ms-2" onClick={exportData}>Export Filtered CSVs</a>
 
                             <div className='row '>
                                 <div className='col-lg-3 p-0 m-0' >
                                     <input className='form-control' onChange={(e) => getData(e, "age")} placeholder='Enter Age' style={{ borderRadius: "15px" }} type="text" />
                                 </div>
                                 <div className='col-lg-3 p-0 m-0' >
-                                    <input className='form-control' onChange={(e) => getData(e, "gender")} placeholder='Enter Gender' style={{ borderRadius: "15px" }} type="text" />
+
+                                    <select className="form-select" onChange={(e) => getData(e, "gender")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+
+
+                                    {/* <input className='form-control' onChange={(e) => getData(e, "gender")} placeholder='Enter Gender' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
                                 <div className='col-lg-3 p-0 m-0' >
                                     <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" />
                                 </div>
 
                                 <div className='col-lg-3 p-0 m-0' >
-                                    <input className='form-control' onChange={(e) => getData(e, "country")} placeholder='Enter Country' style={{ borderRadius: "15px" }} type="text" />
-                                </div>
 
+                                    <select className="form-select" onChange={(e) => getData(e, "country")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+
+                                    {/* <input className='form-control' onChange={(e) => getData(e, "country")} placeholder='Enter Country' style={{ borderRadius: "15px" }} type="text" /> */}
+                                </div>
                             </div>
 
                             <table class="table img-fluid">
                                 <thead>
                                     <tr>
-                                        <th scope="col"># id</th>
-                                        <th scope="col">Full Name</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Age</th>
-                                        <th scope="col">Gender</th>
-                                        <th scope="col">Goal</th>
-                                        <th scope="col">Date of Birth</th>
-                                        <th scope="col">Country</th>
+                                        <th># id</th>
+                                        <th>Email</th>
+                                        <th>Full Name</th>
+                                        <th>Date of Birth</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Goal</th>
+                                        <th>Country</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -153,13 +165,13 @@ const Table = () => {
                                             return (
                                                 <>
                                                     <tr>
-                                                        <th scope="row">{items.id}</th>
-                                                        <td>{items.name}</td>
+                                                        <td>{items.id}</td>
                                                         <td>{items.email}</td>
+                                                        <td>{items.name}</td>
+                                                        <td>{items.dob}</td>
                                                         <td>{items.age}</td>
                                                         <td>{items.gender}</td>
                                                         <td>{items.goal}</td>
-                                                        <td>{items.dob}</td>
                                                         <td>{items.country}</td>
                                                     </tr>
                                                 </>
@@ -170,16 +182,16 @@ const Table = () => {
 
                                 </tbody>
                                 <tfoot>
-                                <div className="p-3">
-              <button className="btn btn-outline-primary btn-sm" onClick={handlePrevPage} disabled={pages === 1}>
-                <i className="fa-solid fa-arrow-left"></i>
-                </button>
-                &nbsp;&nbsp;
-                <button className="btn btn-outline-primary btn-sm" onClick={handleNextPage} disabled={totalResults <= endResult}>
-                  <i className="fa-solid fa-arrow-right"></i>
-                </button>
-                <p >Showing {startResult} - {count}  results  -  total :&nbsp;&nbsp;{count}</p>
-              </div>
+                                    <div className="p-3">
+                                        <button className="btn btn-outline-success btn-sm" onClick={handlePrevPage} disabled={pages === 1}>
+                                            <i className="fa-solid fa-arrow-left"></i>
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button className="btn btn-outline-success btn-sm" onClick={handleNextPage} disabled={totalResults <= endResult}>
+                                            <i className="fa-solid fa-arrow-right"></i>
+                                        </button>
+                                        <p >Showing {startResult} - {count}  results  -  total :&nbsp;&nbsp;{count}</p>
+                                    </div>
 
                                 </tfoot>
                             </table>
