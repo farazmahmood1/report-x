@@ -9,6 +9,7 @@ const Table = () => {
     const [data, setData] = useState([])
     const [filteredTable, setFilteredTable] = useState([])
     const [modalShow, setModalShow] = useState(false);
+    const [loading , setLoading] = useState(false)
     const [pages, setPages] = useState(1);
     const [count, setCount] = useState('');
     const [userId, setUserId] = useState(null)
@@ -26,12 +27,14 @@ const Table = () => {
     const startResult = (pages - 1) * resultsPerPage + 1;
     const endResult = Math.min(pages * resultsPerPage, totalResults);
 
+    // const emailArray = responseData.map(item => ({ email: item.email }));
+
     useEffect(() => {
         getData()
     }, [])
 
     const getData = (e, attr) => {
-
+        setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Authorization", "Bearer 8|JE5SHg4ESU5vBkiwpdGp4Fzli7dpulcsrlLbfVPz18b952af");
@@ -67,6 +70,7 @@ const Table = () => {
         fetch(`https://apis.reportsxapis.com/api/get_general_data?page=${pages}`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
+                setLoading(false)
                 setData(result.data)
                 setCount(result.total_count)
                 setFilteredTable(result.data)
@@ -100,6 +104,7 @@ const Table = () => {
     }
 
     const exportAllData = () => {
+        setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Authorization", "Bearer 8|JE5SHg4ESU5vBkiwpdGp4Fzli7dpulcsrlLbfVPz18b952af");
@@ -115,6 +120,7 @@ const Table = () => {
             .then((response) => response.json())
             .then((result) => {
                 exportCSV(result.data)
+                setLoading(false)
             })
             .catch((error) => console.error(error));
     }
@@ -137,9 +143,6 @@ const Table = () => {
 
     const exportFilteredCSV = () => {
         const filteredData = filteredTable.map(({ Idate, created_at, updated_at, ...rest }) => rest);
-        // const csvContent = "data:text/csv;charset=utf-8," +
-        //     filteredData.map((item) => Object.values(item).join(",")).join("\n");
-
         const columnOrder = ['email', 'name', 'dob', 'age', 'gender', 'goal', 'country'];
         const csvContent =
             "data:text/csv;charset=utf-8," +
@@ -156,6 +159,37 @@ const Table = () => {
         link.click();
     };
 
+    const sendEMail = () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            filteredTable
+        });
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        fetch("https://apis.reportsxapis.com/api/post_general_data", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result)
+                if (result.status === "200") {
+                    toast.success("Email sent successfully")
+                }
+                else if (result.status === "401") {
+                    toast.warn("something went wrong...")
+                }
+            })
+            .catch((error) => {
+                console.error(error)
+                toast.warn("Try again later")
+            });
+    }
     const modalClose = (items) => {
         setModalShow((prev) => !prev)
         setUserId(items)
@@ -168,10 +202,12 @@ const Table = () => {
                     <div className="card m-lg-5">
                         <div className="card-body">
                             <h3 className="card-title">Report <i className='fa-thin fa-x' /></h3>
-                            <p className="card-text">Efficiently send multiple emails at once with our website, streamlining communication and saving you valuable time and effort.</p>
+                            <p className="card-text">Efficiently send multiple emails at once with our website, <br /> streamlining communication and saving you valuable time and effort.</p>
                             <div className='d-flex justify-content-right'></div>
                             <a className="btn btn-outline-success mt-2 mb-3" onClick={exportAllData}>Export All CSVs</a>
                             <a className="btn btn-outline-success mt-2 mb-3 ms-2" onClick={exportFilteredCSV}>Export Filtered CSVs</a>
+                            <a className="btn btn-outline-secondary mt-2 mb-3 ms-2" onClick={sendEMail} >Send Email</a>
+
                             <div className='row '>
                                 <div className='col-lg-3 p-0 m-0' >
 
@@ -235,20 +271,22 @@ const Table = () => {
 
 
                                 </tbody>
-                                <tfoot>
-                                    <div className="container mt-5">
-                                        <button className="btn btn-outline-success btn-sm" onClick={handlePrevPage} disabled={pages === 1}>
-                                            <i className="fa-solid fa-arrow-left"></i>
-                                        </button>
-                                        &nbsp;&nbsp;
-                                        <button className="btn btn-outline-success btn-sm" onClick={handleNextPage} disabled={totalResults <= endResult}>
-                                            <i className="fa-solid fa-arrow-right"></i>
-                                        </button>
+
+                            </table>
+                            <div>
+                                <div className=" mt-5">
+                                    <button className="btn btn-outline-success btn-sm" style={{ cursor: "pointer" }} onClick={handlePrevPage} disabled={pages === 1}>
+                                        <i className="fa-solid fa-arrow-left"></i>
+                                    </button>
+                                    &nbsp;&nbsp;
+                                    <button className="btn btn-outline-success btn-sm" style={{ cursor: "pointer" }} onClick={handleNextPage} disabled={totalResults <= endResult}>
+                                        <i className="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                    <div>
                                         <p>Showing {startResult} - {count}  results  -  total :&nbsp;&nbsp;{count}</p>
                                     </div>
-                                </tfoot>
-                            </table>
-
+                                </div>
+                            </div>
                             {
                                 modalShow === true ? <UpdateUser userId={userId} modalShow={modalShow} modalClose={modalClose} /> : null
                             }

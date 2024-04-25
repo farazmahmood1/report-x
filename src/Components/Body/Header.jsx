@@ -20,7 +20,7 @@ const Header = () => {
 
             <nav className="navbar navbar-expand-lg navbar-light bg-light bg-nav">
                 <div className="container-fluid">
-                    <a className="navbar-brand title-text text-white" href="#">Report X</a>
+                    <a className="navbar-brand title-text text-white" href="#"> <i className='fa-solid fa-envelopes-bulk' /></a>
                     {/* <i  className='fa fa-solid fa-right-from-bracket' /> */}
                 </div>
             </nav>
