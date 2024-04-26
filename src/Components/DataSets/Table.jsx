@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import UpdateUser from '../Modals/UpdateUser';
+import SendBulkEmail from '../Modals/SendBulkEmail';
 toast.configure();
 
 const Table = () => {
@@ -9,7 +10,8 @@ const Table = () => {
     const [data, setData] = useState([])
     const [filteredTable, setFilteredTable] = useState([])
     const [modalShow, setModalShow] = useState(false);
-    const [loading , setLoading] = useState(false)
+    const [modalBulkEmail, setModalBulkEmail] = useState(false);
+    const [loading, setLoading] = useState(false)
     const [pages, setPages] = useState(1);
     const [count, setCount] = useState('');
     const [userId, setUserId] = useState(null)
@@ -27,7 +29,9 @@ const Table = () => {
     const startResult = (pages - 1) * resultsPerPage + 1;
     const endResult = Math.min(pages * resultsPerPage, totalResults);
 
-    // const emailArray = responseData.map(item => ({ email: item.email }));
+    const emailArray = filteredTable?.map(item => (item.email));
+
+
 
     useEffect(() => {
         getData()
@@ -159,40 +163,13 @@ const Table = () => {
         link.click();
     };
 
-    const sendEMail = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            filteredTable
-        });
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
-
-        fetch("https://apis.reportsxapis.com/api/post_general_data", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                console.log(result)
-                if (result.status === "200") {
-                    toast.success("Email sent successfully")
-                }
-                else if (result.status === "401") {
-                    toast.warn("something went wrong...")
-                }
-            })
-            .catch((error) => {
-                console.error(error)
-                toast.warn("Try again later")
-            });
-    }
     const modalClose = (items) => {
         setModalShow((prev) => !prev)
         setUserId(items)
+    }
+
+    const bulkModal = (items) => {
+        setModalBulkEmail((prev) => !prev)
     }
 
     return (
@@ -206,7 +183,7 @@ const Table = () => {
                             <div className='d-flex justify-content-right'></div>
                             <a className="btn btn-outline-success mt-2 mb-3" onClick={exportAllData}>Export All CSVs</a>
                             <a className="btn btn-outline-success mt-2 mb-3 ms-2" onClick={exportFilteredCSV}>Export Filtered CSVs</a>
-                            <a className="btn btn-outline-secondary mt-2 mb-3 ms-2" onClick={sendEMail} >Send Email</a>
+                            <a className="btn btn-outline-secondary mt-2 mb-3 ms-2" onClick={bulkModal} >Send Email</a>
 
                             <div className='row '>
                                 <div className='col-lg-3 p-0 m-0' >
@@ -289,6 +266,10 @@ const Table = () => {
                             </div>
                             {
                                 modalShow === true ? <UpdateUser userId={userId} modalShow={modalShow} modalClose={modalClose} /> : null
+                            }
+
+                            {
+                                modalBulkEmail === true ? <SendBulkEmail emailArray={emailArray} modalBulkEmail={modalBulkEmail} bulkModal={bulkModal} /> : null
                             }
                         </div>
                     </div>
