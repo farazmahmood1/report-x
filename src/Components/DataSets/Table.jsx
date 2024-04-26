@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import UpdateUser from '../Modals/UpdateUser';
 import SendBulkEmail from '../Modals/SendBulkEmail';
+import countries from '../SourceFiles/CountriesList';
 toast.configure();
 
 const Table = () => {
@@ -45,14 +46,18 @@ const Table = () => {
         myHeaders.append("Cookie", "XSRF-TOKEN=eyJpdiI6IjI2ekFNNFlhVEZOSWlqazhoUUZpQ1E9PSIsInZhbHVlIjoiSklCdUpHTkUvUURnTDBwTmVkWi9obFpwQ202eUZwMFhmNFcyQkh0LzlFNnRJR1JmTk5UV1JvTE1VdlV5QmI5OUVMT1VsaFRVcU82V2lNMkI2dy9yTkY5WTVwaWZrUjd1ZkxBRDZaNmtrQ2IvY2FvUFFtaHJVVVNTQTdkV0VucVMiLCJtYWMiOiI2NGZhMmFmOTUyOGMwYWFjNjkzY2VlNDJiODBkNDljNmU0YTVlZDNmNDJhMWYxMGFmNDIwYWQ4OGFmZjMwMDE0IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjRmL0pjbGh0K3JFaG1PeElDOTZqU3c9PSIsInZhbHVlIjoiYVk5TXRBUFF6RVdEeFhZN2VUWGxNeXphbWtlbjZFZWFIREp5Q05MOElpMFNrckMySUcwbGVxcFhWdmNZSmduUHJnWHh0R3ZoZXV0UXV2L1hNM1A1U3ZLWjZUaS90V2pyNFAwbXJCRldVeC9meDR4ODI1SHpqN1g4TWpBMFNLRWkiLCJtYWMiOiI4NDRjYjQ4ZDQ1YjE2NjM3ZDQ3OWQ2NzQyZjY5NDM0NTJlY2E0ZWE4NzM3N2YwMWJkZjk1Njk2Y2NlOTZiYjE3IiwidGFnIjoiIn0%3D");
 
         const formdata = new FormData();
-        if (attr === "fromAge" && attr === "toAge") {
+        if (attr === "fromAge" || attr === "toAge") {
             const fromAge = document.getElementById("fromAge").value;
             const toAge = document.getElementById("toAge").value;
-            const ageRange = `${fromAge}-${toAge}`;
-            formdata.append("age_range", ageRange);
+            if (fromAge && toAge) {
+                const ageRange = `${fromAge}-${toAge}`;
+                console.log(ageRange);
+                formdata.append("age_range", ageRange);
+            }
         }
         else if (attr === "country") {
             formdata.append("country", e.target.value);
+            // console.log(e.target.value)
         }
         else if (attr === "gender") {
             formdata.append("gender", e.target.value);
@@ -205,11 +210,23 @@ const Table = () => {
                                     <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" />
                                 </div>
                                 <div className='col-lg-3 p-0 m-0' >
-                                    <input className='form-control' onChange={(e) => getData(e, "country")} placeholder='Enter Country' style={{ borderRadius: "15px" }} type="text" />
+
+                                    <select className="form-select" onChange={(e) => getData(e, "country")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                        <option value="">Select Country</option>
+                                        {
+                                            countries.map((earth, index) => {
+                                                return(
+                                                    <option value={earth.country} key={index}>{earth.country}</option>
+                                                )
+                                            })
+                                        }
+
+                                    </select>
+                                    {/* <input className='form-control' onChange={(e) => getData(e, "country")} placeholder='Enter Country' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
                             </div>
 
-                            <table class="table img-fluid">
+                            <table className="table img-fluid">
                                 <thead>
                                     <tr>
                                         <th># id</th>

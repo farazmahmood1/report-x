@@ -68,7 +68,7 @@ const SendBulkEmail = ({ emailArray, modalBulkEmail, bulkModal }) => {
 
 
                         <div className='col-lg-12'>
-                            <label htmlFor="exampleInputEmail1" className="form-label">Full Name</label>
+                            <label htmlFor="exampleInputEmail1" className="form-label">Body</label>
                             <textarea type="text" className="form-control" onChange={(e) => setMessage(e.target.value)} rows={5} aria-describedby="emailHelp" />
 
                         </div>

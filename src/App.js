@@ -4,7 +4,6 @@ import "./App.css";
 import Login from "./Components/Auth/index";
 import Header from "./Components/Body/Header";
 import Table from "./Components/DataSets/Table";
-import Main from "./Components/Main";
 
 function App() {
   const [login, setLogin] = useState(true);
@@ -40,7 +39,8 @@ function App() {
         )}
       </div> */}
 
-      <Main />
+      <Header />
+      <Table />
     </div>
   );
 }
