@@ -8,9 +8,11 @@ const SendBulkEmail = ({ emailArray, modalBulkEmail, bulkModal }) => {
 
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
 
 
     const sendEMail = () => {
+        setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -33,14 +35,17 @@ const SendBulkEmail = ({ emailArray, modalBulkEmail, bulkModal }) => {
                 console.log(result)
                 if (result.status === "200") {
                     toast.success("Email sent successfully")
+                    setLoading(false)
                 }
                 else if (result.status === "401") {
                     toast.warn("something went wrong...")
+                    setLoading(false)
                 }
             })
             .catch((error) => {
                 console.error(error)
                 toast.warn("Try again later")
+                setLoading(false)
             });
     }
 
@@ -76,7 +81,17 @@ const SendBulkEmail = ({ emailArray, modalBulkEmail, bulkModal }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={sendEMail} variant="outline-success">Send Email</Button>
+                    {
+                        loading === true ? (
+                            <>
+                            <Button variant="outline-success"><i className='fa fa-solid fa-spin fa-spinner'/></Button>
+                            </>
+                        ) : (
+                            <>
+                            <Button onClick={sendEMail} variant="outline-success">Send Email</Button>
+                            </>
+                        )
+                    }
                 </Modal.Footer>
             </Modal>
         </div>

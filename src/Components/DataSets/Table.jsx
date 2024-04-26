@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import UpdateUser from '../Modals/UpdateUser';
 import SendBulkEmail from '../Modals/SendBulkEmail';
 import countries from '../SourceFiles/CountriesList';
+import goals from '../SourceFiles/GoalsList';
 toast.configure();
 
 const Table = () => {
@@ -207,7 +208,20 @@ const Table = () => {
                                     </select>
                                 </div>
                                 <div className='col-lg-3 p-0 m-0' >
-                                    <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" />
+
+                                    <select className="form-select" onChange={(e) => getData(e, "goal")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                        <option value="">Select Goals</option>
+                                        {
+                                            goals.map((goal, index) => {
+                                                return (
+                                                    <option value={goal.goal} key={index}>{goal.goal}</option>
+                                                )
+                                            })
+                                        }
+
+                                    </select>
+
+                                    {/* <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
                                 <div className='col-lg-3 p-0 m-0' >
 
@@ -215,7 +229,7 @@ const Table = () => {
                                         <option value="">Select Country</option>
                                         {
                                             countries.map((earth, index) => {
-                                                return(
+                                                return (
                                                     <option value={earth.country} key={index}>{earth.country}</option>
                                                 )
                                             })
@@ -226,47 +240,63 @@ const Table = () => {
                                 </div>
                             </div>
 
-                            <table className="table img-fluid">
-                                <thead>
-                                    <tr>
-                                        <th># id</th>
-                                        <th>Email</th>
-                                        <th>Full Name</th>
-                                        <th>Date of Birth</th>
-                                        <th>Age</th>
-                                        <th>Gender</th>
-                                        <th>Goal</th>
-                                        <th>Country</th>
-                                        <th>Edit</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        data?.map((items) => {
-                                            return (
-                                                <>
-                                                    <tr>
-                                                        <td>{items?.id}</td>
-                                                        <td>{items?.email}</td>
-                                                        <td>{items?.name}</td>
-                                                        <td>{items?.dob}</td>
-                                                        <td>{items?.age}</td>
-                                                        <td>{items?.gender}</td>
-                                                        <td>{items?.goal}</td>
-                                                        <td>{items?.country}</td>
-                                                        <td><button className='btn btn-outline-success' onClick={() => modalClose(items)}><i className='fa fa-solid fa-marker' /></button></td>
-                                                        <td><button className='btn btn-outline-danger' onClick={() => deleteUser(items?.id)}><i className='fa fa-solid fa-trash' /></button></td>
-                                                    </tr>
-                                                </>
-                                            )
-                                        })
-                                    }
+                            {
+                                loading === true ? (
+                                    <>
+                                        <div className='col-lg-12'>
+                                            <div className="d-flex justify-content-center align-items-center vh-100">
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
 
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <table className="table img-fluid">
+                                            <thead>
+                                                <tr>
+                                                    <th># id</th>
+                                                    <th>Email</th>
+                                                    <th>Full Name</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Age</th>
+                                                    <th>Gender</th>
+                                                    <th>Goal</th>
+                                                    <th>Country</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    data?.map((items) => {
+                                                        return (
+                                                            <>
+                                                                <tr>
+                                                                    <td>{items?.id}</td>
+                                                                    <td>{items?.email}</td>
+                                                                    <td>{items?.name}</td>
+                                                                    <td>{items?.dob}</td>
+                                                                    <td>{items?.age}</td>
+                                                                    <td>{items?.gender}</td>
+                                                                    <td>{items?.goal}</td>
+                                                                    <td>{items?.country}</td>
+                                                                    <td><button className='btn btn-outline-success' onClick={() => modalClose(items)}><i className='fa fa-solid fa-marker' /></button></td>
+                                                                    <td><button className='btn btn-outline-danger' onClick={() => deleteUser(items?.id)}><i className='fa fa-solid fa-trash' /></button></td>
+                                                                </tr>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
 
-                                </tbody>
+                                            </tbody>
 
-                            </table>
+                                        </table>
+                                    </>
+                                )
+                            }
                             <div>
                                 <div className=" mt-5">
                                     <button className="btn btn-outline-success btn-sm" style={{ cursor: "pointer" }} onClick={handlePrevPage} disabled={pages === 1}>
