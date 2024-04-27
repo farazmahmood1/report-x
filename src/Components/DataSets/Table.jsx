@@ -5,6 +5,7 @@ import UpdateUser from '../Modals/UpdateUser';
 import SendBulkEmail from '../Modals/SendBulkEmail';
 import countries from '../SourceFiles/CountriesList';
 import goals from '../SourceFiles/GoalsList';
+import numbers from '../SourceFiles/CountList';
 toast.configure();
 
 const Table = () => {
@@ -66,8 +67,11 @@ const Table = () => {
         else if (attr === "goal") {
             formdata.append("goal", e.target.value);
         }
-        else {
-
+        else if(attr === "number"){
+            formdata.append("appno", e.target.value);
+        }
+        else{
+            
         }
 
         const requestOptions = {
@@ -191,23 +195,36 @@ const Table = () => {
                             <a className="btn btn-outline-success mt-2 mb-3 ms-2" onClick={exportFilteredCSV}>Export Filtered CSVs</a>
                             <a className="btn btn-outline-secondary mt-2 mb-3 ms-2" onClick={bulkModal} >Send Email</a>
 
-                            <div className='row '>
-                                <div className='col-lg-3 p-0 m-0' >
-
+                            <div className='row mx-auto'>
+                                <div className='col-lg-2 p-0 m-0' >
                                     <div className='d-flex'>
                                         <input className='form-control' id='fromAge' onChange={(e) => getData(e, "fromAge")} placeholder='From Age' style={{ borderRadius: "15px 0px 0px 15px", borderRight: "none" }} type="number" />
                                         <input className='form-control' id='toAge' onChange={(e) => getData(e, "toAge")} placeholder='To Age' style={{ borderRadius: "0px 15px 15px 0px", borderLeft: "none" }} type="number" />
                                     </div>
 
                                 </div>
-                                <div className='col-lg-3 p-0 m-0' >
+                                <div className='col-lg-2 p-0 m-0' >
+                                <select className="form-select" onChange={(e) => getData(e, "number")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                    <option value="">Select App No.</option>
+                                      {
+                                          numbers.map((numbers) => {
+                                              return(
+                                                  <>
+                                                  <option value={numbers.count}>{numbers.count}</option>
+                                                </>
+                                            )
+                                        })
+                                      }
+                                    </select>
+                                </div>
+                                <div className='col-lg-2 p-0 m-0' >
                                     <select className="form-select" onChange={(e) => getData(e, "gender")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
-                                <div className='col-lg-3 p-0 m-0' >
+                                <div className='col-lg-2 p-0 m-0' >
 
                                     <select className="form-select" onChange={(e) => getData(e, "goal")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Goals</option>
@@ -223,7 +240,7 @@ const Table = () => {
 
                                     {/* <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
-                                <div className='col-lg-3 p-0 m-0' >
+                                <div className='col-lg-2 p-0 m-0' >
 
                                     <select className="form-select" onChange={(e) => getData(e, "country")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Country</option>
@@ -258,6 +275,7 @@ const Table = () => {
                                             <thead>
                                                 <tr>
                                                     <th># id</th>
+                                                    <th># App</th>
                                                     <th>Email</th>
                                                     <th>Full Name</th>
                                                     <th>Date of Birth</th>
@@ -276,6 +294,7 @@ const Table = () => {
                                                             <>
                                                                 <tr>
                                                                     <td>{items?.id}</td>
+                                                                    <td>{items?.appno}</td>
                                                                     <td>{items?.email}</td>
                                                                     <td>{items?.name}</td>
                                                                     <td>{items?.dob}</td>
