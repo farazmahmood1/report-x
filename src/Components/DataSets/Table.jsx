@@ -20,11 +20,9 @@ const Table = () => {
     const [userId, setUserId] = useState(null)
     const resultsPerPage = 50;
 
-    // function for getting page next:
     const handleNextPage = () => {
         setPages((prevPage) => prevPage + 1);
     };
-    // function for getting previous page:
     const handlePrevPage = () => {
         setPages((prevPage) => Math.max(prevPage - 1, 1));
     };
@@ -33,8 +31,6 @@ const Table = () => {
     const endResult = Math.min(pages * resultsPerPage, totalResults);
 
     const emailArray = filteredTable?.map(item => (item.email));
-
-
 
     useEffect(() => {
         getData()
@@ -47,31 +43,34 @@ const Table = () => {
         myHeaders.append("Authorization", "Bearer 8|JE5SHg4ESU5vBkiwpdGp4Fzli7dpulcsrlLbfVPz18b952af");
         myHeaders.append("Cookie", "XSRF-TOKEN=eyJpdiI6IjI2ekFNNFlhVEZOSWlqazhoUUZpQ1E9PSIsInZhbHVlIjoiSklCdUpHTkUvUURnTDBwTmVkWi9obFpwQ202eUZwMFhmNFcyQkh0LzlFNnRJR1JmTk5UV1JvTE1VdlV5QmI5OUVMT1VsaFRVcU82V2lNMkI2dy9yTkY5WTVwaWZrUjd1ZkxBRDZaNmtrQ2IvY2FvUFFtaHJVVVNTQTdkV0VucVMiLCJtYWMiOiI2NGZhMmFmOTUyOGMwYWFjNjkzY2VlNDJiODBkNDljNmU0YTVlZDNmNDJhMWYxMGFmNDIwYWQ4OGFmZjMwMDE0IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjRmL0pjbGh0K3JFaG1PeElDOTZqU3c9PSIsInZhbHVlIjoiYVk5TXRBUFF6RVdEeFhZN2VUWGxNeXphbWtlbjZFZWFIREp5Q05MOElpMFNrckMySUcwbGVxcFhWdmNZSmduUHJnWHh0R3ZoZXV0UXV2L1hNM1A1U3ZLWjZUaS90V2pyNFAwbXJCRldVeC9meDR4ODI1SHpqN1g4TWpBMFNLRWkiLCJtYWMiOiI4NDRjYjQ4ZDQ1YjE2NjM3ZDQ3OWQ2NzQyZjY5NDM0NTJlY2E0ZWE4NzM3N2YwMWJkZjk1Njk2Y2NlOTZiYjE3IiwidGFnIjoiIn0%3D");
 
+        const fromAge = document.getElementById("fromAge").value;
+        const toAge = document.getElementById("toAge").value;
+        const country = document.getElementById("country").value;
+        const gender = document.getElementById("gender").value;
+        const goal = document.getElementById("goal").value;
+        const appno = document.getElementById("appno").value;
+
+
         const formdata = new FormData();
-        if (attr === "fromAge" || attr === "toAge") {
-            const fromAge = document.getElementById("fromAge").value;
-            const toAge = document.getElementById("toAge").value;
-            if (fromAge && toAge) {
-                const ageRange = `${fromAge}-${toAge}`;
-                console.log(ageRange);
-                formdata.append("age_range", ageRange);
-            }
+        if (fromAge && toAge) {
+            const ageRange = `${fromAge}-${toAge}`;
+            formdata.append("age_range", ageRange);
         }
-        else if (attr === "country") {
-            formdata.append("country", e.target.value);
-            // console.log(e.target.value)
+
+        if (country) {
+            formdata.append("country", country);
         }
-        else if (attr === "gender") {
-            formdata.append("gender", e.target.value);
+
+        if (gender) {
+            formdata.append("gender", gender);
         }
-        else if (attr === "goal") {
-            formdata.append("goal", e.target.value);
+
+        if (goal) {
+            formdata.append("goal", goal);
         }
-        else if(attr === "number"){
-            formdata.append("appno", e.target.value);
-        }
-        else{
-            
+
+        if (appno) {
+            formdata.append("appno", appno);
         }
 
         const requestOptions = {
@@ -204,21 +203,21 @@ const Table = () => {
 
                                 </div>
                                 <div className='col-lg-2 p-0 m-0' >
-                                <select className="form-select" onChange={(e) => getData(e, "number")} style={{ borderRadius: "15px" }} aria-label="Default select example">
-                                    <option value="">Select App No.</option>
-                                      {
-                                          numbers.map((numbers) => {
-                                              return(
-                                                  <>
-                                                  <option value={numbers.count}>{numbers.count}</option>
-                                                </>
-                                            )
-                                        })
-                                      }
+                                    <select className="form-select" id="appno" onChange={(e) => getData(e, "number")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                        <option value="">Select App No.</option>
+                                        {
+                                            numbers.map((numbers) => {
+                                                return (
+                                                    <>
+                                                        <option value={numbers.count}>{numbers.count}</option>
+                                                    </>
+                                                )
+                                            })
+                                        }
                                     </select>
                                 </div>
                                 <div className='col-lg-2 p-0 m-0' >
-                                    <select className="form-select" onChange={(e) => getData(e, "gender")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                    <select className="form-select" id="gender" onChange={(e) => getData(e, "gender")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
@@ -226,7 +225,7 @@ const Table = () => {
                                 </div>
                                 <div className='col-lg-2 p-0 m-0' >
 
-                                    <select className="form-select" onChange={(e) => getData(e, "goal")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                    <select className="form-select" id="goal" onChange={(e) => getData(e, "goal")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Goals</option>
                                         {
                                             goals.map((goal, index) => {
@@ -237,12 +236,10 @@ const Table = () => {
                                         }
 
                                     </select>
-
-                                    {/* <input className='form-control' onChange={(e) => getData(e, "goal")} placeholder='Enter Goals' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
                                 <div className='col-lg-2 p-0 m-0' >
 
-                                    <select className="form-select" onChange={(e) => getData(e, "country")} style={{ borderRadius: "15px" }} aria-label="Default select example">
+                                    <select className="form-select" id="country" onChange={(e) => getData(e, "country")} style={{ borderRadius: "15px" }} aria-label="Default select example">
                                         <option value="">Select Country</option>
                                         {
                                             countries.map((earth, index) => {
@@ -251,70 +248,73 @@ const Table = () => {
                                                 )
                                             })
                                         }
-
                                     </select>
-                                    {/* <input className='form-control' onChange={(e) => getData(e, "country")} placeholder='Enter Country' style={{ borderRadius: "15px" }} type="text" /> */}
                                 </div>
                             </div>
 
                             {
-                                loading === true ? (
+                                data.length === 0 ? (
                                     <>
-                                        <div className='col-lg-12'>
-                                            <div className="d-flex justify-content-center align-items-center vh-100">
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
+                                        <h1 className='d-flex justify-content-center align-items-center vh-100'>No Data Found</h1>
+                                    </>
+                                ) :
+                                    loading === true ? (
+                                        <div className='row'>
+                                            <div className='col-lg-12'>
+                                                <div className="d-flex justify-content-center align-items-center vh-100">
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
+
                                             </div>
-
                                         </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <table className="table img-fluid">
-                                            <thead>
-                                                <tr>
-                                                    <th># id</th>
-                                                    <th># App</th>
-                                                    <th>Email</th>
-                                                    <th>Full Name</th>
-                                                    <th>Date of Birth</th>
-                                                    <th>Age</th>
-                                                    <th>Gender</th>
-                                                    <th>Goal</th>
-                                                    <th>Country</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {
-                                                    data?.map((items) => {
-                                                        return (
-                                                            <>
-                                                                <tr>
-                                                                    <td>{items?.id}</td>
-                                                                    <td>{items?.appno}</td>
-                                                                    <td>{items?.email}</td>
-                                                                    <td>{items?.name}</td>
-                                                                    <td>{items?.dob}</td>
-                                                                    <td>{items?.age}</td>
-                                                                    <td>{items?.gender}</td>
-                                                                    <td>{items?.goal}</td>
-                                                                    <td>{items?.country}</td>
-                                                                    <td><button className='btn btn-outline-success' onClick={() => modalClose(items)}><i className='fa fa-solid fa-marker' /></button></td>
-                                                                    <td><button className='btn btn-outline-danger' onClick={() => deleteUser(items?.id)}><i className='fa fa-solid fa-trash' /></button></td>
-                                                                </tr>
-                                                            </>
-                                                        )
-                                                    })
-                                                }
+                                    ) : (
+                                        <div className='table-responsive' >
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th># id</th>
+                                                        <th># App</th>
+                                                        <th>Email</th>
+                                                        <th>Full Name</th>
+                                                        <th>Date of Birth</th>
+                                                        <th>Age</th>
+                                                        <th>Gender</th>
+                                                        <th>Goal</th>
+                                                        <th>Country</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        data?.map((items) => {
+                                                            return (
+                                                                <>
+                                                                    <tr>
+                                                                        <td>{items?.id}</td>
+                                                                        <td>{items?.appno}</td>
+                                                                        <td>{items?.email}</td>
+                                                                        <td>{items?.name}</td>
+                                                                        <td>{items?.dob}</td>
+                                                                        <td>{items?.age}</td>
+                                                                        <td>{items?.gender}</td>
+                                                                        <td>{items?.goal}</td>
+                                                                        <td>{items?.country}</td>
+                                                                        <td><button className='btn btn-outline-success' onClick={() => modalClose(items)}><i className='fa fa-solid fa-marker' /></button></td>
+                                                                        <td><button className='btn btn-outline-danger' onClick={() => deleteUser(items?.id)}><i className='fa fa-solid fa-trash' /></button></td>
+                                                                    </tr>
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
 
-                                            </tbody>
+                                                </tbody>
 
-                                        </table>
-                                    </>
-                                )
+                                            </table>
+                                        </div>
+                                    )
                             }
                             <div>
                                 <div className=" mt-5">
