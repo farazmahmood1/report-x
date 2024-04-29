@@ -72,7 +72,7 @@ const UpdateUser = ({ userId, modalClose, modalShow }) => {
                 <Modal.Body>
                     <div className="row">
                         <div className="col-lg-6 mb-1 mt-1">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Date of Birth</label>
+                            <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
                             <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} id="exampleInputEmail1" aria-describedby="emailHelp" />
                         </div>
                         <div className="col-lg-6 mb-1 mt-1">
