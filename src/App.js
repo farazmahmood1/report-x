@@ -23,8 +23,12 @@ function App() {
     SetLocalLogin();
   }, []);
 
+  const handleContextMenu = (e) => {
+    e.preventDefault(); // Prevent default behavior (context menu)
+  };
+
   return (
-    <div>
+    <div onContextMenu={handleContextMenu}>
       {/* <div>
         {login === false ? (
           <Router>

@@ -12,6 +12,7 @@ const Table = () => {
 
     const [data, setData] = useState([])
     const [filteredTable, setFilteredTable] = useState([])
+    const [genderCount, setGenderCount] = useState([])
     const [modalShow, setModalShow] = useState(false);
     const [modalBulkEmail, setModalBulkEmail] = useState(false);
     const [loading, setLoading] = useState(false)
@@ -87,6 +88,8 @@ const Table = () => {
                 setData(result.data)
                 setCount(result.total_count)
                 setFilteredTable(result.data)
+                setGenderCount(result.data)
+                console.log(result.data)
             })
             .catch((error) => console.error(error));
     }
@@ -189,7 +192,110 @@ const Table = () => {
                         <div className="card-body">
                             <h3 className="card-title">Report <i className='fa-thin fa-x' /></h3>
                             <p className="card-text">Efficiently send multiple emails at once with our website, <br /> streamlining communication and saving you valuable time and effort.</p>
-                            <div className='d-flex justify-content-right'></div>
+
+
+                            <div className="accordion" id="accordionExample">
+
+                                <div className="accordion-item">
+                                    <h2 className="accordion-header" id="headingThree">
+                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Analytics
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div className="accordion-body">
+
+                                            {/* <div className='table-responsive' >
+                                                <table className="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>App No.</th>
+                                                            <th>Gender</th>
+                                                            <th>Goal</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{genderCount.filter((x) => x.appno === "1").length}</td>
+                                                            <td>{genderCount.filter((x) => x.gender === "male" || x.gender === "Male").length}</td>
+                                                            <td>{genderCount.filter((x) => x.goal === "To Enlarge profile photos").length}</td>
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div> */}
+
+                                            <div className='row'>
+                                                <div className='col-lg-3'>
+                                                    <h3>Gender:</h3>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>Gender Male </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.gender === "male" || x.gender === "Male").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>Gender Female </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.gender === "female" || x.gender === "Female").length}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className='col-lg-3'>
+                                                    <h1>Goals:</h1>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>To detect my Blockers </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.goal === "To detect my Blockers").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>To see my lost followers </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.goal === "To see my lost followers").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>To Massunfollow </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.goal === "To Massunfollow").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>To watch Stories Anon </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.goal === "To watch Stories Anon").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>To Enlarge profile photos </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.goal === "To Enlarge profile photos").length}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className='col-lg-3'>
+                                                    <h3>App No.</h3>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>App #1 </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.appno === "1").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>App #2 </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.appno === "2").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>App #3 </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.appno === "3").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>App #4 </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.appno === "4").length}</span>
+                                                    </div>
+                                                    <div className='m-0 p-0  d-flex justify-content-between align-items-baseline'>
+                                                        <p className='m-0 p-0' style={{ fontSize: "18px" }}>App #5 </p>
+                                                        <span style={{ fontWeight: 700, fontSize: "26px" }}>{genderCount.filter((x) => x.appno === "5").length}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
                             <a className="btn btn-outline-success mt-2 mb-3" onClick={exportAllData}>Export All CSVs</a>
                             <a className="btn btn-outline-success mt-2 mb-3 ms-2" onClick={exportFilteredCSV}>Export Filtered CSVs</a>
                             <a className="btn btn-outline-secondary mt-2 mb-3 ms-2" onClick={bulkModal} >Send Email</a>
